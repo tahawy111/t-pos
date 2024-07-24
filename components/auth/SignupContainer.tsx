@@ -1,8 +1,12 @@
+import { cn } from "@/lib/utils";
 import { useSignupContext } from "../contexts/SignupContext";
-import AccountInputs from "./account-inputs";
+import AccountSignupForm from "./account-signup-form";
+import CompanySignupForm from "./company-signup-form";
 
 function SignupContainer() {
-  const { step } = useSignupContext();
+  const { step, accountInfo, companyInfo } = useSignupContext();
+  console.log({ accountInfo, companyInfo });
+
   return (
     <>
       <div className="flex items-center justify-center flex-col h-full">
@@ -14,8 +18,18 @@ function SignupContainer() {
           >
             <li className="md:flex-1">
               {/* <!-- Completed Step --> */}
-              <a className="group flex flex-col border-l-4 border-red-600 py-2 pl-4 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4">
-                <span className="text-sm font-medium text-red-600 group-hover:text-red-800">
+              <a
+                className={cn(
+                  "group flex flex-col border-l-4 py-2 pl-4 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4",
+                  step >= 1 && "border-red-600"
+                )}
+              >
+                <span
+                  className={cn(
+                    "text-sm font-medium",
+                    step >= 1 && "text-red-600"
+                  )}
+                >
                   Step 1
                 </span>
                 <span className="text-sm font-medium">Account Information</span>
@@ -24,10 +38,18 @@ function SignupContainer() {
             <li className="md:flex-1">
               {/* <!-- Current Step --> */}
               <a
-                className="flex flex-col border-l-4 border-gray-300 py-2 pl-4 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4"
+                className={cn(
+                  "flex flex-col border-l-4 py-2 pl-4 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4",
+                  step >= 2 ? "border-red-600" : "border-gray-300"
+                )}
                 aria-current="step"
               >
-                <span className="text-sm font-medium text-gray-600">
+                <span
+                  className={cn(
+                    "text-sm font-medium ",
+                    step >= 2 ? "text-red-600" : "text-gray-600"
+                  )}
+                >
                   Step 2
                 </span>
                 <span className="text-sm font-medium">Company Information</span>
@@ -47,7 +69,8 @@ function SignupContainer() {
           </ol>
         </nav>
 
-        {step === 1 && <AccountInputs />}
+        {step === 1 && <AccountSignupForm />}
+        {step === 2 && <CompanySignupForm />}
       </div>
     </>
   );

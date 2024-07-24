@@ -1,6 +1,6 @@
 "use client";
 
-import AccountInputs from "@/components/auth/account-inputs";
+import AccountInputs from "@/components/auth/account-signup-form";
 import SignupContainer from "@/components/auth/SignupContainer";
 import { SignupContextProvider } from "@/components/contexts/SignupContext";
 import { Button } from "@/components/ui/button";
