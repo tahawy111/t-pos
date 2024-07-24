@@ -69,3 +69,18 @@ enum UserRole {
   MODERATOR
   GUEST
 }
+
+model Company {
+  id      String @id @default(cuid())
+  name    String
+  email   String @unique
+  address String
+  numbers Number[]
+}
+
+model Number {
+  id        String  @id @default(cuid())
+  number    String
+  company   Company @relation(fields: [companyId], references: [id])
+  companyId String
+}

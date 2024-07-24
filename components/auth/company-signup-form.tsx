@@ -19,12 +19,24 @@ export default function CompanySignupForm({}: AuthFormProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
-  const { setStep, setCompanyInfo, onHandleBack, companyInfo } =
+  const { setCompanyInfo, onHandleBack, companyInfo, accountInfo } =
     useSignupContext();
   const { register, handleSubmit } = useForm<ICompanyPropsContext>();
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setCompanyInfo((prev) => ({ ...prev, ...data }));
+    setIsLoading(true);
+    // Register
+
+    axios
+      .post("/api/register", { accountInfo, companyInfo })
+      .then(() => {
+        toast.success("Registerd has been done successfully, return to login");
+      })
+      .catch((error) => {
+        toast.error(error);
+      })
+      .finally(() => setIsLoading(false));
   };
 
   return (
@@ -50,7 +62,7 @@ export default function CompanySignupForm({}: AuthFormProps) {
               id="email"
               disabled={isLoading}
               {...register("email")}
-              />
+            />
           </div>
           <div className="flex flex-col gap-y-1">
             <label htmlFor="email">Address</label>
@@ -68,7 +80,7 @@ export default function CompanySignupForm({}: AuthFormProps) {
             <Button variant={"secondary"} onClick={() => onHandleBack()}>
               Back
             </Button>
-            <Button>Next</Button>
+            <Button variant={"rose"}>Register</Button>
           </div>
         </form>
       </div>
