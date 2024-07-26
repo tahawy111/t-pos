@@ -9,7 +9,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "cockroachdb"
   url      = env("DATABASE_URL")
 }
 
@@ -51,6 +51,7 @@ model User {
   updatedAt      DateTime  @updatedAt
   accounts       Account[]
   sessions       Session[]
+  company        Company[]
 }
 
 model VerificationRequest {
@@ -71,16 +72,18 @@ enum UserRole {
 }
 
 model Company {
-  id      String @id @default(cuid())
+  id      String   @id @default(cuid())
   name    String
-  email   String @unique
+  email   String   @unique
   address String
   numbers Number[]
+  userId  String
+  user    User     @relation(fields: [userId], references: [id])
 }
 
 model Number {
   id        String  @id @default(cuid())
   number    String
-  company   Company @relation(fields: [companyId], references: [id])
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
   companyId String
 }

@@ -41,8 +41,8 @@ export default function CompanySignupForm({}: AuthFormProps) {
 
   return (
     <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-      <div className="dark:bg-[#27282d] px-4 py-8 shadow sm:rounded-lg sm:px-10 gap-y-3 flex flex-col">
-        <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="dark:bg-[#27282d] px-4 py-8 shadow sm:rounded-lg sm:px-10">
+        <form className="flex flex-col gap-y-3" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-y-1">
             <label htmlFor="name">Company Name</label>
             <Input
@@ -74,6 +74,19 @@ export default function CompanySignupForm({}: AuthFormProps) {
               disabled={isLoading}
               {...register("address")}
             />
+          </div>
+          <div className="flex flex-col gap-y-1">
+            <label htmlFor="email">Phone Numbers <span className="text-red-500/90 text-xs">(Comma separated)</span></label>
+            <div className="flex justify-between">
+              <Input
+                // defaultValue={companyInfo.address}
+                placeholder="Phone Numbers (Comma separated)"
+                type=""
+                id="address"
+                disabled={isLoading}
+                {...register("numbers")}
+              />
+            </div>
           </div>
 
           <div className="flex justify-between w-full mt-8 sm:mx-auto sm:w-full sm:max-w-md">

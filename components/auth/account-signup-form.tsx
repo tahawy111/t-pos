@@ -27,7 +27,7 @@ export default function AccountSignupForm({}: AuthFormProps) {
   return (
     <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
       <div className="dark:bg-[#27282d] px-4 py-8 shadow sm:rounded-lg sm:px-10 gap-y-3 flex flex-col">
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form className="flex flex-col gap-y-3" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-y-1">
             <label htmlFor="name">Name</label>
             <Input
