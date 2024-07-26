@@ -14,7 +14,7 @@ datasource db {
 }
 
 model Account {
-  id                 String    @id @default(cuid())
+  id                 String    @id @default(uuid())
   userId             String
   providerType       String
   providerId         String
@@ -30,7 +30,7 @@ model Account {
 }
 
 model Session {
-  id           String   @id @default(cuid())
+  id           String   @id @default(uuid())
   userId       String
   expires      DateTime
   sessionToken String   @unique
@@ -41,7 +41,7 @@ model Session {
 }
 
 model User {
-  id             String    @id @default(cuid())
+  id             String    @id @default(uuid())
   name           String?
   email          String?   @unique
   emailVerified  DateTime?
@@ -55,7 +55,7 @@ model User {
 }
 
 model VerificationRequest {
-  id         String   @id @default(cuid())
+  id         String   @id @default(uuid())
   identifier String
   token      String   @unique
   expires    DateTime
@@ -72,7 +72,7 @@ enum UserRole {
 }
 
 model Company {
-  id      String   @id @default(cuid())
+  id      String   @id @default(uuid())
   name    String
   email   String   @unique
   address String
@@ -82,7 +82,7 @@ model Company {
 }
 
 model Number {
-  id        String  @id @default(cuid())
+  id        String  @id @default(uuid())
   number    String
   company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
   companyId String
