@@ -4,24 +4,26 @@ import { db } from "@/lib/db";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { email, name, password } = body;
+    const { accountInfo, companyInfo } = body;
 
-    if (!name || !email || !password)
-      return new Response("Missing Info", { status: 400 });
+    const 
 
-    const hashedPassword = await bcrypt.hash(password, 12);
+    // if (!name || !email || !password)
+    //   return new Response("Missing Info", { status: 400 });
 
-    const user = await db.user.create({
-      data: {
-        email,
-        name,
-        hashedPassword,
-        image:
-          "https://i.imgur.com/Juc36Wr.jpeg",
-      },
-    });
+    // const hashedPassword = await bcrypt.hash(password, 12);
 
-    return new Response(JSON.stringify(user));
+    // const user = await db.user.create({
+    //   data: {
+    //     email,
+    //     name,
+    //     hashedPassword,
+    //     image:
+    //       "https://i.imgur.com/Juc36Wr.jpeg",
+    //   },
+    // });
+
+    // return new Response(JSON.stringify(user));
   } catch (error) {
     console.log("REGISTRATION_ERROR");
     return new Response("Internal Error", { status: 500 });
