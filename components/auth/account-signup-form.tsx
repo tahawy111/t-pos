@@ -17,7 +17,11 @@ export default function AccountSignupForm({}: AuthFormProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const { setStep, setAccountInfo, accountInfo } = useSignupContext();
-  const { register, handleSubmit } = useForm<IUserPropsContext>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IUserPropsContext>();
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setStep((prev) => prev + 1);
@@ -25,20 +29,28 @@ export default function AccountSignupForm({}: AuthFormProps) {
   };
 
   return (
-    <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+    <div className="mt-3 sm:mx-auto sm:w-full sm:max-w-md">
       <div className="dark:bg-[#27282d] px-4 py-8 shadow sm:rounded-lg sm:px-10 gap-y-3 flex flex-col">
-        <form className="flex flex-col gap-y-3" onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex flex-col gap-y-1">
+        <form
+          className="flex flex-col gap-y-3"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <div className="flex flex-col gap-y-0.5">
             <label htmlFor="name">Name</label>
             <Input
               defaultValue={accountInfo.name}
               placeholder="Name"
               type="text"
               id="name"
-              {...register("name")}
+              {...register("name", { required: "Name is required" })}
             />
+            {errors.name && (
+              <span className="text-red-500 text-xs">
+                {errors.name.message}
+              </span>
+            )}
           </div>
-          <div className="flex flex-col gap-y-1">
+          <div className="flex flex-col gap-y-0.5">
             <label htmlFor="email">Email</label>
             <Input
               defaultValue={accountInfo.email}
@@ -46,11 +58,16 @@ export default function AccountSignupForm({}: AuthFormProps) {
               type="email"
               id="email"
               disabled={isLoading}
-              {...register("email")}
+              {...register("email", { required: "Email is required" })}
             />
+            {errors.email && (
+              <span className="text-red-500 text-xs">
+                {errors.email.message}
+              </span>
+            )}
           </div>
 
-          <div className="flex flex-col gap-y-1">
+          <div className="flex flex-col gap-y-0.5">
             <label htmlFor="password">Password</label>
             <Input
               defaultValue={accountInfo.password}
@@ -58,11 +75,15 @@ export default function AccountSignupForm({}: AuthFormProps) {
               type="password"
               id="password"
               disabled={isLoading}
-              {...register("password")}
+              {...register("password", { required: "Password is required" })}
             />
+            {errors.password && (
+              <span className="text-red-500 text-xs">
+                {errors.password.message}
+              </span>
+            )}
           </div>
-          <div className="flex justify-between w-full mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-            <Button variant={"secondary"}>Back</Button>
+          <div className="flex justify-end w-full mt-8 sm:mx-auto sm:w-full sm:max-w-md">
             <Button>Next</Button>
           </div>
         </form>

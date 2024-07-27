@@ -42,6 +42,7 @@ export default function CompanySignupForm({}: AuthFormProps) {
       .post("/api/register", { accountInfo, companyInfo: data })
       .then(() => {
         toast.success("Registerd has been done successfully, Please login!");
+        router.push("/login")
       })
       .catch((error) => {
         toast.error(error);
@@ -50,7 +51,7 @@ export default function CompanySignupForm({}: AuthFormProps) {
   };
 
   return (
-    <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+    <div className="mt-3 sm:mx-auto sm:w-full sm:max-w-md">
       <div className="dark:bg-[#27282d] px-4 py-8 shadow sm:rounded-lg sm:px-10">
         <form
           className="flex flex-col gap-y-3"

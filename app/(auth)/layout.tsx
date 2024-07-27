@@ -9,8 +9,8 @@ async function AuthLayout({ children }: { children: React.ReactNode }) {
     redirect("/");
   }
   
-  console.log(await db.company.deleteMany());
-  console.log(await db.user.deleteMany());
+  // console.log(await db.company.deleteMany());
+  // console.log(await db.user.deleteMany());
 
   return <div className="h-full">{children}</div>;
 }
