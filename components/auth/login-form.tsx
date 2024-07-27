@@ -10,7 +10,6 @@ import Link from "next/link";
 
 interface AuthFormProps {}
 
-
 export default function LoginForm({}: AuthFormProps) {
   const router = useRouter();
   const session = useSession();
@@ -84,31 +83,6 @@ export default function LoginForm({}: AuthFormProps) {
             </Button>
           </div>
         </form>
-
-        <div className="mt-6">
-          <div className="relative">
-            <div className="absolute inset-0 items-center flex">
-              <div className="w-full border-t border-gray-300" />
-            </div>
-
-            <div className="relative flex justify-center text-sm">
-              <span className="dark:bg-[#27282d] bg-white px-2 text-gray-500 dark:text-white">
-                Or continue with
-              </span>
-            </div>
-          </div>
-
-        </div>
-
-        <div className="flex gap-2 justify-center text-sm mt-6 px-2 text-gray-500 dark:text-white">
-          {"LOGIN" === "LOGIN"
-            ? "New To Messenger?"
-            : "Already Have An Account?"}
-
-          <div className="underline cursor-pointer">
-            <Link href={"/register"}>Create an account</Link>
-          </div>
-        </div>
       </div>
     </div>
   );

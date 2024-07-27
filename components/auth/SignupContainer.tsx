@@ -10,7 +10,6 @@ function SignupContainer() {
   return (
     <>
 
-      <h1 className="text-center text-3xl font-bold text-neutral-700/80 my-3">Welcome to T-POS Application</h1>
       <h1 className="text-center text-xl font-bold text-neutral-700/50 my-3">Register Proccess (For the first time only)</h1>
 
       <div className="flex items-center justify-center flex-col h-full">

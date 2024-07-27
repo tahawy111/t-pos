@@ -74,3 +74,9 @@ input[type="email"],
 input[type="number"] {
   @apply  focus-visible:ring-0 focus-visible:ring-offset-0
 }
+
+/* html,
+body,
+:root {
+  height: 100%;
+} */
