@@ -6,24 +6,55 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { accountInfo, companyInfo } = body;
 
-    const 
+    const { name, email, password } = accountInfo;
+    const {
+      name: companyName,
+      email: companyEmail,
+      address,
+      numbers,
+    } = companyInfo;
 
-    // if (!name || !email || !password)
-    //   return new Response("Missing Info", { status: 400 });
+    if (
+      !name ||
+      !email ||
+      !password ||
+      !companyName ||
+      !companyEmail ||
+      !address ||
+      !numbers
+    )
+      return new Response("Missing Info", { status: 400 });
 
-    // const hashedPassword = await bcrypt.hash(password, 12);
+    const hashedPassword = await bcrypt.hash(password, 12);
 
-    // const user = await db.user.create({
-    //   data: {
-    //     email,
-    //     name,
-    //     hashedPassword,
-    //     image:
-    //       "https://i.imgur.com/Juc36Wr.jpeg",
-    //   },
-    // });
+    const numbersMap = (numbers as string)
+      .split(",")
+      .map((number) => ({ number }));
 
-    // return new Response(JSON.stringify(user));
+    const user = await db.user.create({
+      data: {
+        email,
+        name,
+        hashedPassword,
+        image: "https://i.imgur.com/Juc36Wr.jpeg",
+      },
+    });
+
+    await db.company.create({
+      data: {
+        name: companyName,
+        email: companyEmail,
+        address: address,
+        userId: user.id,
+        numbers: {
+          createMany: {
+            data: numbersMap,
+          },
+        },
+      },
+    });
+
+    return new Response(JSON.stringify(user));
   } catch (error) {
     console.log("REGISTRATION_ERROR");
     return new Response("Internal Error", { status: 500 });
