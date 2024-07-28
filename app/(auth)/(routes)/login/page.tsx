@@ -1,18 +1,23 @@
 import LoginForm from "@/components/auth/login-form";
+import { getAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import {} from "react";
 
 interface LoginPageProps {}
 
 export default async function LoginPage({}: LoginPageProps) {
-  const session = await getServerSession();
+  const session = await getAuthSession();
+  console.log(session);
+  
 
   const user = await db.user.findFirst();
 
   if (!user && !session?.user) {
     redirect("/register");
+  }
+  if (user && session && session.user) {
+    redirect("/");
   }
 
   return (

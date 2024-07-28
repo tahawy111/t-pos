@@ -2,10 +2,20 @@ import { cn } from "@/lib/utils";
 import { useSignupContext } from "../contexts/SignupContext";
 import AccountSignupForm from "./account-signup-form";
 import CompanySignupForm from "./company-signup-form";
+import { getServerSession } from "next-auth";
+import { db } from "@/lib/db";
+import { redirect } from "next/navigation";
 
-function SignupContainer() {
+async function SignupContainer() {
   const { step, accountInfo, companyInfo } = useSignupContext();
-  console.log({ accountInfo, companyInfo });
+
+  const session = await getServerSession();
+
+  const user = await db.user.findFirst();
+
+  if (user || session?.user) {
+    redirect("/login");
+  }
 
   return (
     <>

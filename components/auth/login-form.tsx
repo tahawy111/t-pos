@@ -14,21 +14,6 @@ export default function LoginForm({}: AuthFormProps) {
   const router = useRouter();
   const session = useSession();
   const [isLoading, setIsLoading] = useState(false);
-  const socialAction = (action: string) => {
-    setIsLoading(true);
-
-    signIn(action, { redirect: false })
-      .then((callback) => {
-        if (callback?.error) {
-          toast.error("Invalid credentials!");
-        }
-
-        if (callback?.ok) {
-          router.push("/");
-        }
-      })
-      .finally(() => setIsLoading(false));
-  };
 
   const {
     register,
@@ -52,6 +37,8 @@ export default function LoginForm({}: AuthFormProps) {
         if (callback?.ok) {
           router.push("/");
         }
+        console.log(callback);
+        
       })
       .finally(() => setIsLoading(false));
   };

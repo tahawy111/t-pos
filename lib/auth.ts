@@ -29,6 +29,8 @@ export const authOptions: AuthOptions = {
           },
         });
 
+        
+
         if (!user || !user.hashedPassword) {
           throw new Error("Invalid credentials");
         }
