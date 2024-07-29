@@ -11,7 +11,7 @@ import axios from "axios";
 import {
   ICompanyPropsContext,
   useSignupContext,
-} from "../contexts/SignupContext";
+} from "../contexts/signup-context";
 
 interface AuthFormProps {}
 

@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { useSignupContext } from "../contexts/SignupContext";
+import { useSignupContext } from "../contexts/signup-context";
 import AccountSignupForm from "./account-signup-form";
 import CompanySignupForm from "./company-signup-form";
 import { getServerSession } from "next-auth";

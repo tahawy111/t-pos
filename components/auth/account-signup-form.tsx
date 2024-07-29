@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import axios from "axios";
-import { IUserPropsContext, useSignupContext } from "../contexts/SignupContext";
+import { IUserPropsContext, useSignupContext } from "../contexts/signup-context";
 
 interface AuthFormProps {}
 
