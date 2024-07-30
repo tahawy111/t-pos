@@ -1,6 +1,7 @@
-import Navbar from "@/components/layout/navbar";
-import NavigationSidebar from "@/components/layout/navigation-sidebar";
+import Navbar from "@/components/navigation/navbar";
+import NavigationSidebar from "@/components/navigation/navigation-sidebar";
 import { getAuthSession } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 export default async function MainLayout({
   children,
@@ -9,11 +10,15 @@ export default async function MainLayout({
 }) {
   const session = await getAuthSession();
 
+  if (!session) {
+    redirect("/login");
+  }
+
   return (
     <div>
       <Navbar />
       <div className="flex">
-        <div className="">
+        <div className="hidden md:block inset-y-0">
           <NavigationSidebar />
         </div>
         <div>{children}</div>
