@@ -31,7 +31,7 @@ export default function NavigationSidebar() {
         {
           title: "Products",
           Icon: Icons.Products,
-          path: "/dashboard/products",
+          path: "/products",
         },
         {
           title: "About",

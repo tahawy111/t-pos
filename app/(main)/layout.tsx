@@ -21,7 +21,7 @@ export default async function MainLayout({
         <div className="hidden md:block inset-y-0">
           <NavigationSidebar />
         </div>
-        <div>{children}</div>
+        <div className="w-screen h-[calc(100vh-65px)] p-2">{children}</div>
       </div>
     </div>
   );
