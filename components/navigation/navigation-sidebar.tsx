@@ -154,7 +154,7 @@ export default function NavigationSidebar() {
       <div className="text-3xl font-semibold text-center my-3 flex justify-evenly items-center md:hidden">
         <Link href={`/`}>T-POS</Link>
       </div>
-      <ScrollArea className="flex-1 w-full">
+      <ScrollArea className="flex-1 ">
         <hr />
         {sidebar.map((item: any, index: number) => (
           <NavigationItem key={index} item={item} />

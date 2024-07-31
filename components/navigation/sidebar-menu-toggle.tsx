@@ -15,7 +15,7 @@ export default function SidebarMenuToggle({ }: MobileToggleProps) {
         </Button>
       </SheetTrigger>
 
-      <SheetContent className="p-0 flex gap-0">
+      <SheetContent className="p-0 flex gap-0 w-64">
         <div className="w-full">
           <NavigationSidebar />
         </div>

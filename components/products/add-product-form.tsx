@@ -6,9 +6,11 @@ import { useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import FileUpload from "@/components/file-upload";
-import { UploadCloud } from "lucide-react";
+import { Repeat, UploadCloud } from "lucide-react";
 import { imageUpload } from "@/lib/ImageUplaod";
 import Image from "next/image";
+import { generateBarcode } from "@/lib/utils";
+import ActionTooltip from "../action-tooltip";
 
 interface AddProductFormProps {}
 
@@ -26,12 +28,13 @@ export default function AddProductForm({}: AddProductFormProps) {
   const {
     register,
     handleSubmit,
-    watch,
+    setValue,
     formState: { errors },
   } = useForm<ProductFormInputs>();
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isImageLoading, setIsImageLoading] = useState(false);
   const [imagesUrl, setImagesUrl] = useState<
     { url: string; delete_url: string }[]
   >([]);
@@ -39,17 +42,17 @@ export default function AddProductForm({}: AddProductFormProps) {
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     console.log(data);
 
-    // setIsLoading(true);
-    // axios
-    //   .post("/api/register", { data })
-    //   .then(() => {
-    //     toast.success("Registerd has been done successfully, Please login!");
-    //     router.push("/login");
-    //   })
-    //   .catch((error) => {
-    //     toast.error(error);
-    //   })
-    //   .finally(() => setIsLoading(false));
+    setIsLoading(true);
+    axios
+      .post("/api/register", { data })
+      .then(() => {
+        toast.success("Registerd has been done successfully, Please login!");
+        router.push("/login");
+      })
+      .catch((error) => {
+        toast.error(error);
+      })
+      .finally(() => setIsLoading(false));
   };
   const handleImageChange = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -57,9 +60,10 @@ export default function AddProductForm({}: AddProductFormProps) {
     if (event.target.files && event.target.files[0]) {
       // Show a preview of the selected image
       const file = event.target.files[0];
-      console.log(file);
+      setIsImageLoading(true);
       const res = await imageUpload(file);
       setImagesUrl((prev) => [...prev, res]);
+      setIsImageLoading(false);
     }
   };
 
@@ -68,14 +72,33 @@ export default function AddProductForm({}: AddProductFormProps) {
     event.preventDefault();
     event.stopPropagation();
     event.dataTransfer.dropEffect = "copy";
+    event.currentTarget.classList.replace(
+      "border-gray-900/10",
+      "border-gray-900"
+    );
   };
-
-  const handleDrop = (event: React.DragEvent<HTMLLabelElement>) => {
+  const handleDragLeave = (event: React.DragEvent<HTMLLabelElement>) => {
     event.preventDefault();
     event.stopPropagation();
+    event.currentTarget.classList.replace(
+      "border-gray-900",
+      "border-gray-900/10"
+    );
+  };
+
+  const handleDrop = async (event: React.DragEvent<HTMLLabelElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    event.currentTarget.classList.replace(
+      "border-gray-900",
+      "border-gray-900/10"
+    );
     if (event.dataTransfer.files && event.dataTransfer.files[0]) {
       const file = event.dataTransfer.files[0];
-      //   setImagePreview(URL.createObjectURL(file));
+      setIsImageLoading(true);
+      const res = await imageUpload(file);
+      setImagesUrl((prev) => [...prev, res]);
+      setIsImageLoading(false);
 
       // Trigger file input change event
       const fileInput = document.getElementById("image") as HTMLInputElement;
@@ -89,7 +112,9 @@ export default function AddProductForm({}: AddProductFormProps) {
   return (
     <div className="w-full flex justify-center">
       <div className="bg-white shadow-lg rounded-lg p-8 max-w-3xl w-full">
-        <h1 className="text-2xl font-bold mb-6 text-center">Product Form</h1>
+        <h1 className="text-2xl font-bold mb-6 text-center">
+          Add New Product 📝
+        </h1>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
             <label htmlFor="product-name" className="block text-gray-700 mb-2">
@@ -143,7 +168,6 @@ export default function AddProductForm({}: AddProductFormProps) {
               className="w-full p-2 border rounded"
               placeholder="Enter dealer price"
               {...register("dealerPrice", {
-                required: "Dealer Price is required",
                 pattern: {
                   value: /^\d+(\.\d+)?$/,
                   message:
@@ -171,7 +195,6 @@ export default function AddProductForm({}: AddProductFormProps) {
               className="w-full p-2 border rounded"
               placeholder="Enter wholesale price"
               {...register("wholesalePrice", {
-                required: "Wholesale Price is required",
                 pattern: {
                   value: /^\d+(\.\d+)?$/,
                   message:
@@ -190,13 +213,27 @@ export default function AddProductForm({}: AddProductFormProps) {
             <label htmlFor="barcode" className="block text-gray-700 mb-2">
               Barcode
             </label>
-            <Input
-              type="text"
-              id="barcode"
-              className="w-full p-2 border rounded"
-              placeholder="Enter barcode"
-              {...register("barcode")}
-            />
+            <div className="relative">
+              <Input
+                defaultValue={generateBarcode()}
+                type="text"
+                id="barcode"
+                className="w-full p-2 border rounded"
+                placeholder="Enter barcode"
+                {...register("barcode")}
+              />
+              <div
+                className="absolute top-2 right-1"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setValue("barcode", generateBarcode());
+                }}
+              >
+                <ActionTooltip label="Regenerate">
+                  <Repeat />
+                </ActionTooltip>
+              </div>
+            </div>
           </div>
 
           <div className="mb-4">
@@ -225,13 +262,6 @@ export default function AddProductForm({}: AddProductFormProps) {
             <label htmlFor="image" className="block text-gray-700 mb-2">
               Product Image
             </label>
-            {/* <Input
-              type="file"
-              id="image"
-              className="w-full p-2 border rounded"
-              {...register("image")}
-              onChange={handleImageChange}
-            /> */}
             <input
               onChange={handleImageChange}
               type="file"
@@ -242,6 +272,7 @@ export default function AddProductForm({}: AddProductFormProps) {
               htmlFor={"image"}
               className="w-full h-full flex justify-center items-center flex-col border-gray-900/10 border-2 py-10 rounded-lg border-dashed"
               onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
               onDrop={handleDrop}
             >
               <UploadCloud size={40} className="text-gray-500" />
@@ -258,6 +289,7 @@ export default function AddProductForm({}: AddProductFormProps) {
                   <Image alt="Product image" src={url} fill />
                 </div>
               ))}
+              {isImageLoading && <span>Uploading Image....</span>}
             </div>
           </div>
 
