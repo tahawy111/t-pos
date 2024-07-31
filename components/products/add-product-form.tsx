@@ -7,6 +7,8 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import FileUpload from "@/components/file-upload";
 import { UploadCloud } from "lucide-react";
+import { imageUpload } from "@/lib/ImageUplaod";
+import Image from "next/image";
 
 interface AddProductFormProps {}
 
@@ -30,6 +32,9 @@ export default function AddProductForm({}: AddProductFormProps) {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
+  const [imagesUrl, setImagesUrl] = useState<
+    { url: string; delete_url: string }[]
+  >([]);
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     console.log(data);
@@ -46,10 +51,15 @@ export default function AddProductForm({}: AddProductFormProps) {
     //   })
     //   .finally(() => setIsLoading(false));
   };
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     if (event.target.files && event.target.files[0]) {
       // Show a preview of the selected image
       const file = event.target.files[0];
+      console.log(file);
+      const res = await imageUpload(file);
+      setImagesUrl((prev) => [...prev, res]);
     }
   };
 
@@ -57,7 +67,7 @@ export default function AddProductForm({}: AddProductFormProps) {
   const handleDragOver = (event: React.DragEvent<HTMLLabelElement>) => {
     event.preventDefault();
     event.stopPropagation();
-    event.dataTransfer.dropEffect = 'copy';
+    event.dataTransfer.dropEffect = "copy";
   };
 
   const handleDrop = (event: React.DragEvent<HTMLLabelElement>) => {
@@ -65,17 +75,16 @@ export default function AddProductForm({}: AddProductFormProps) {
     event.stopPropagation();
     if (event.dataTransfer.files && event.dataTransfer.files[0]) {
       const file = event.dataTransfer.files[0];
-    //   setImagePreview(URL.createObjectURL(file));
+      //   setImagePreview(URL.createObjectURL(file));
 
       // Trigger file input change event
-      const fileInput = document.getElementById('image') as HTMLInputElement;
+      const fileInput = document.getElementById("image") as HTMLInputElement;
       if (fileInput) {
         fileInput.files = event.dataTransfer.files;
-        fileInput.dispatchEvent(new Event('change', { bubbles: true }));
+        fileInput.dispatchEvent(new Event("change", { bubbles: true }));
       }
     }
   };
-
 
   return (
     <div className="w-full flex justify-center">
@@ -213,10 +222,10 @@ export default function AddProductForm({}: AddProductFormProps) {
           </div>
 
           <div className="mb-6">
-            {/* <label htmlFor="image" className="block text-gray-700 mb-2">
+            <label htmlFor="image" className="block text-gray-700 mb-2">
               Product Image
             </label>
-            <Input
+            {/* <Input
               type="file"
               id="image"
               className="w-full p-2 border rounded"
@@ -240,8 +249,16 @@ export default function AddProductForm({}: AddProductFormProps) {
               <h2 className="text-blue-500 font-semibold">
                 Choose files or drag and drop
               </h2>
-              <p className="text-sm text-gray-600">Image (4MB)</p>
+              <p className="text-sm text-gray-600">Image (32MB)</p>
             </label>
+
+            <div className="flex">
+              {imagesUrl.map(({ url }, index) => (
+                <div className="w-32 h-32 relative m-3" key={index}>
+                  <Image alt="Product image" src={url} fill />
+                </div>
+              ))}
+            </div>
           </div>
 
           <button

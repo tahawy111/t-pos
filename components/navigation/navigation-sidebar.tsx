@@ -150,7 +150,7 @@ export default function NavigationSidebar() {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
-    <div className="flex flex-col items-center h-[calc(100vh-65px)] text-primary w-full bg-gray-50">
+    <div className="flex flex-col items-center fixed h-full text-primary bg-gray-50 w-64">
       <div className="text-3xl font-semibold text-center my-3 flex justify-evenly items-center md:hidden">
         <Link href={`/`}>T-POS</Link>
       </div>
