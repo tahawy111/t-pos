@@ -14,8 +14,6 @@ import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 interface pageProps {}
 
 export default function page({}: pageProps) {
-
-
   return (
     <div>
       <Breadcrumb className="py-3 px-3">

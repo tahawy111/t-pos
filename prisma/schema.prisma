@@ -52,6 +52,7 @@ model User {
   accounts       Account[]
   sessions       Session[]
   company        Company[]
+  products       Product[]
 }
 
 model VerificationRequest {
@@ -86,4 +87,25 @@ model Number {
   number    String
   company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
   companyId String
+}
+
+model Product {
+  id             String   @id @default(uuid())
+  name           String
+  price          Decimal
+  dealerPrice    Decimal?
+  wholesalePrice Decimal?
+  barcode        String   @unique
+  quantity       Int
+  images         Image[]
+  user           User     @relation(fields: [userId], references: [id])
+  userId         String
+}
+
+model Image {
+  id         String  @id @default(uuid())
+  url        String
+  delete_url String
+  productId  String
+  product    Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 }

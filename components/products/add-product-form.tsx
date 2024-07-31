@@ -21,7 +21,6 @@ export interface ProductFormInputs {
   wholesalePrice: number;
   barcode: string;
   quantity: number;
-  image: FileList;
 }
 
 export default function AddProductForm({}: AddProductFormProps) {
@@ -44,10 +43,10 @@ export default function AddProductForm({}: AddProductFormProps) {
 
     setIsLoading(true);
     axios
-      .post("/api/register", { data })
-      .then(() => {
+      .post("/api/products/add", { ...data, images: imagesUrl })
+      .then((res) => {
         toast.success("Registerd has been done successfully, Please login!");
-        router.push("/login");
+        router.push(`/products/${res.data.id}`);
       })
       .catch((error) => {
         toast.error(error);
@@ -219,9 +218,17 @@ export default function AddProductForm({}: AddProductFormProps) {
                 type="text"
                 id="barcode"
                 className="w-full p-2 border rounded"
-                placeholder="Enter barcode"
-                {...register("barcode")}
+                placeholder="Enter Barcode"
+                {...register("barcode", {
+                  required: "Barcode is required",
+                })}
               />
+              {errors.wholesalePrice && (
+                <p className="text-red-500 text-sm">
+                  {errors.wholesalePrice.message}
+                </p>
+              )}
+              {/* TODO: Check if barcode is available */}
               <div
                 className="absolute top-2 right-1"
                 onClick={(e) => {
@@ -270,7 +277,7 @@ export default function AddProductForm({}: AddProductFormProps) {
             />
             <label
               htmlFor={"image"}
-              className="w-full h-full flex justify-center items-center flex-col border-gray-900/10 border-2 py-10 rounded-lg border-dashed"
+              className="w-full h-full flex justify-center items-center flex-col border-gray-900/10 border-2 py-10 rounded-lg border-dashed cursor-pointer"
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
@@ -297,7 +304,7 @@ export default function AddProductForm({}: AddProductFormProps) {
             type="submit"
             className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-400"
           >
-            Submit
+            Add New Product
           </button>
         </form>
       </div>
