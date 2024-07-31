@@ -14,21 +14,21 @@ export default function ProductsPage() {
   return (
     <div className="h-full">
       <div className="flex justify-between w-full">
-        <Breadcrumb className="py-3 px-3 block">
+        <Breadcrumb className="py-3 px-3">
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/">Home</BreadcrumbLink>
+              <Link href="/">Home</Link>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink href="/products">products</BreadcrumbLink>
+              <Link href="/products">products</Link>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
 
-        {/* <Link className={cn(buttonVariants(""), "")}>
-          Create New Product
-        </Link> */}
+        <Link href={"/products/add"}>
+          <Button>Add New Product</Button>
+        </Link>
       </div>
     </div>
   );
