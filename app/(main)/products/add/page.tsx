@@ -1,4 +1,4 @@
-import AddProductForm from "@/components/products/add-product-form";
+import AddProductForm from "@/components/products/add/add-product-form";
 import {
   Breadcrumb,
   BreadcrumbItem,

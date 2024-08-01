@@ -151,7 +151,7 @@ export default function NavigationSidebar() {
 
   return (
     <div className="flex flex-col items-center fixed h-full text-primary bg-gray-50 w-64">
-      <div className="text-3xl font-semibold text-center my-3 flex justify-evenly items-center md:hidden">
+      <div className="text-3xl font-semibold text-center my-3 md:flex justify-evenly items-center hidden">
         <Link href={`/`}>T-POS</Link>
       </div>
       <ScrollArea className="flex-1 ">

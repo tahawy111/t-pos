@@ -2,15 +2,16 @@
 import { Input } from "@/components/ui/input";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import FileUpload from "@/components/file-upload";
 import { Repeat, UploadCloud } from "lucide-react";
 import { imageUpload } from "@/lib/ImageUplaod";
 import Image from "next/image";
-import { generateBarcode } from "@/lib/utils";
-import ActionTooltip from "../action-tooltip";
+import { cn, generateBarcode } from "@/lib/utils";
+import ActionTooltip from "../../action-tooltip";
+import { checkIfBarcodeAvailable } from "@/app/actions/productActions";
 
 interface AddProductFormProps {}
 
@@ -28,18 +29,34 @@ export default function AddProductForm({}: AddProductFormProps) {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<ProductFormInputs>();
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isImageLoading, setIsImageLoading] = useState(false);
+  const [barcodeStatus, setBarcodeStatus] = useState({
+    status: "",
+    isAvailable: true,
+  });
   const [imagesUrl, setImagesUrl] = useState<
     { url: string; delete_url: string }[]
   >([]);
+  const barcode = watch("barcode");
+
+  useEffect(() => {
+    checkIfBarcodeAvailable(barcode)
+      .then(({ isAvailable, status }) => {
+        setBarcodeStatus((prev) => ({ ...prev, isAvailable, status }));
+      })
+      .catch(({ isAvailable, status }) => {
+        setBarcodeStatus((prev) => ({ ...prev, isAvailable, status }));
+      });
+  }, [barcode]);
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    console.log(data);
+    if (!barcodeStatus.isAvailable) return;
 
     setIsLoading(true);
     axios
@@ -226,6 +243,18 @@ export default function AddProductForm({}: AddProductFormProps) {
               {errors.wholesalePrice && (
                 <p className="text-red-500 text-sm">
                   {errors.wholesalePrice.message}
+                </p>
+              )}
+              {barcodeStatus && (
+                <p
+                  className={cn(
+                    "text-sm",
+                    barcodeStatus.isAvailable
+                      ? "text-green-500"
+                      : "text-red-500"
+                  )}
+                >
+                  {barcodeStatus.status}
                 </p>
               )}
               {/* TODO: Check if barcode is available */}
