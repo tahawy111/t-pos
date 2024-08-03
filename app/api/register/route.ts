@@ -12,6 +12,7 @@ export async function POST(req: Request) {
       email: companyEmail,
       address,
       numbers,
+      currency,
     } = companyInfo;
 
     if (
@@ -46,6 +47,7 @@ export async function POST(req: Request) {
         email: companyEmail,
         address: address,
         userId: user.id,
+        currency,
         numbers: {
           createMany: {
             data: numbersMap,

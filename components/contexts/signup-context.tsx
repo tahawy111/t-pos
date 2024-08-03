@@ -31,6 +31,7 @@ export interface ICompanyPropsContext {
   email: string;
   address: string;
   numbers: string;
+  currency: string;
 }
 
 export const SignupContext = createContext<SignupContextInterface>({
@@ -49,6 +50,7 @@ export function SignupContextProvider({ children }: { children: ReactNode }) {
     email: "",
     address: "",
     numbers: "",
+    currency: "",
   });
   const onHandleNext = () => setStep((prev) => prev + 1);
   const onHandleBack = () => setStep((prev) => prev - 1);

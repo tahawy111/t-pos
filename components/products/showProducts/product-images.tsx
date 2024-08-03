@@ -1,39 +1,86 @@
-import { getThis } from '@/lib/utils';
-import Image from 'next/image';
-import { FC, useId, useState } from 'react';
+"use client";
+import { Image as ImageType } from "@prisma/client";
+import Image from "next/image";
+import { FC, useId, useState } from "react";
 
 interface ProductImagesProps {
-    images: any[];
+  images: ImageType[];
 }
 
 const ProductImages: FC<ProductImagesProps> = ({ images }) => {
-    const [imgIndex, setImgIndex] = useState(0);
-    const DevImgsId = useId()
 
-    return <>
+  const [imgIndex, setImgIndex] = useState<number>(0);
+  const DevImgsId = useId();
 
-        <div className={``}>
-            <Image className='border border-[#ddd] rounded-lg p-1 w-full object-contain h-[520px]' src={images[imgIndex].url} alt={images[imgIndex].url} />
-            <div className={`flex m-3 justify-center items-center`}>
-
-                <svg onClick={() => (getThis(document) as Document).getElementById(DevImgsId)!.scrollLeft -= 100} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={`w-12 h-12 cursor-pointer select-none ${images.length < 3 && "pointer-events-none opacity-50"}`}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-                </svg>
-
-                <div id={DevImgsId} className={`flex overflow-auto transition-transform duration-150 gap-x-3 scroll-smooth scrollbar-hide`}>
-                    {images.map(({ url }, index) => (
-                        <Image key={index} className={`z-0 transition-transform duration-150 h-[80px] w-[80px] cursor-pointer object-cover border border-[#ddd] rounded-lg p-1 hover:border-[#79612d] ${index === imgIndex ? "border-black" : ""}`} onClick={() => setImgIndex(index)} src={url} alt={url} />
-                    ))}
-                </div>
-
-                <svg onClick={() => (getThis(document) as Document).getElementById(DevImgsId)!.scrollLeft += 100} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={`w-12 h-12 cursor-pointer select-none ${images.length < 3 && "pointer-events-none opacity-50"}`}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                </svg>
-
-            </div>
+  return (
+    <div className="flex justify-center items-center flex-col p-5">
+      <div className="w-[500px] h-[500px] border">
+        <Image
+          className="w-full h-[500px] p-5 object-contain"
+          src={images[imgIndex].url}
+          alt={`Image ${imgIndex}`}
+          width={500}
+          height={500}
+        />
+        <div className="flex items-center">
+          <svg
+            onClick={() =>
+              (document.getElementById(DevImgsId)!.scrollLeft -= 100)
+            }
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className={`w-12 h-12 cursor-pointer select-none ${
+              images.length < 3 && "pointer-events-none opacity-50"
+            }`}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15.75 19.5L8.25 12l7.5-7.5"
+            />
+          </svg>
+          <div
+            id={DevImgsId}
+            className="flex w-full overflow-auto scrollbar-hide gap-3 scrollbar-hide"
+          >
+            {images.map((img, index) => (
+              <Image
+                key={index}
+                src={img.url}
+                onClick={() => setImgIndex(index)}
+                className="w-32 h-32 object-contain rounded-sm cursor-pointer border-2 mx-1"
+                alt={`Thumbnail ${index}`}
+                width={500}
+                height={500}
+              />
+            ))}
+          </div>
+          <svg
+            onClick={() =>
+              (document.getElementById(DevImgsId)!.scrollLeft += 100)
+            }
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className={`w-12 h-12 cursor-pointer select-none ${
+              images.length < 3 && "pointer-events-none opacity-50"
+            }`}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M8.25 4.5l7.5 7.5-7.5 7.5"
+            />
+          </svg>
         </div>
-
-    </>;
+      </div>
+    </div>
+  );
 };
 
 export default ProductImages;

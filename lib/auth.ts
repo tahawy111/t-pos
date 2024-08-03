@@ -29,8 +29,6 @@ export const authOptions: AuthOptions = {
           },
         });
 
-        
-
         if (!user || !user.hashedPassword) {
           throw new Error("Invalid credentials");
         }
@@ -51,22 +49,12 @@ export const authOptions: AuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   // this add (id,image) to the session
   callbacks: {
-    async session({ token, session }) {
-      if (token) {
-        session.user.id = token.id;
-        session.user.name = token.name;
-        session.user.email = token.email;
-        session.user.image = token.picture;
-      }
-
-      return session;
-    },
-
     async jwt({ token, user }) {
       const dbUser = await db.user.findFirst({
         where: {
           email: token.email,
         },
+        include: { company: true },
       });
 
       if (!dbUser) {
@@ -79,7 +67,21 @@ export const authOptions: AuthOptions = {
         name: dbUser.name,
         email: dbUser.email,
         picture: dbUser.image,
+        currency: dbUser.company[0].currency,
       };
+    },
+    async session({ token, session }) {
+      console.log(token);
+
+      if (token) {
+        session.user.id = token.id;
+        session.user.name = token.name;
+        session.user.email = token.email;
+        session.user.image = token.picture;
+        session.user.currency = token.currency;
+      }
+
+      return session;
     },
   },
 };

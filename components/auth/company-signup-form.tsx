@@ -89,7 +89,7 @@ export default function CompanySignupForm({}: AuthFormProps) {
             )}
           </div>
           <div className="flex flex-col gap-y-0.5">
-            <label htmlFor="email">Address</label>
+            <label htmlFor="address">Address</label>
             <Input
               defaultValue={companyInfo.address}
               placeholder="Address"
@@ -97,6 +97,22 @@ export default function CompanySignupForm({}: AuthFormProps) {
               id="address"
               disabled={isLoading}
               {...register("address", { required: "Address is required" })}
+            />
+            {errors.address && (
+              <span className="text-red-500 text-xs">
+                {errors.address.message}
+              </span>
+            )}
+          </div>
+          <div className="flex flex-col gap-y-0.5">
+            <label htmlFor="currency">Currency</label>
+            <Input
+              defaultValue={companyInfo.currency}
+              placeholder="Currency"
+              type="text"
+              id="currency"
+              disabled={isLoading}
+              {...register("currency", { required: "Currency is required" })}
             />
             {errors.address && (
               <span className="text-red-500 text-xs">
