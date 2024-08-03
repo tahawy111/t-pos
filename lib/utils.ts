@@ -12,3 +12,7 @@ export function generateBarcode(): string {
 
   return projectPrefix + uniqueNumber;
 }
+
+export function getThis(param:any) {
+  return param && typeof param !== 'undefined' ?  param : null
+} 

@@ -1,19 +1,16 @@
 "use client";
-import { useCallback, useEffect, useState, useContext } from "react";
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
-import { toast } from "react-hot-toast";
-import { signIn, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
-import axios from "axios";
-import { IUserPropsContext, useSignupContext } from "../contexts/signup-context";
+import {
+  IUserPropsContext,
+  useSignupContext,
+} from "../contexts/signup-context";
+import { useState } from "react";
 
 interface AuthFormProps {}
 
 export default function AccountSignupForm({}: AuthFormProps) {
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const { setStep, setAccountInfo, accountInfo } = useSignupContext();

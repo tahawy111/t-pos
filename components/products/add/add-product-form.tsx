@@ -62,7 +62,7 @@ export default function AddProductForm({}: AddProductFormProps) {
     axios
       .post("/api/products/add", { ...data, images: imagesUrl })
       .then((res) => {
-        toast.success("Registerd has been done successfully, Please login!");
+        toast.success("Product Created Successfully!");
         router.push(`/products/${res.data.id}`);
       })
       .catch((error) => {

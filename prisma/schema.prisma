@@ -83,10 +83,12 @@ model Company {
 }
 
 model Number {
-  id        String  @id @default(uuid())
+  id        String   @id @default(uuid())
   number    String
-  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
   companyId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Product {
@@ -100,12 +102,16 @@ model Product {
   images         Image[]
   user           User     @relation(fields: [userId], references: [id])
   userId         String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
 model Image {
-  id         String  @id @default(uuid())
+  id         String   @id @default(uuid())
   url        String
   delete_url String
   productId  String
-  product    Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }

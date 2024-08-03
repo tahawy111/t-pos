@@ -16,11 +16,25 @@ import {
 } from "@/components/products/showProducts/product-columns";
 import { db } from "@/lib/db";
 
-async function getData(): Promise<ProductTable[]> {
+async function getData(
+  page = 1,
+  pageSize = Number(process.env.NEXT_PUBLIC_PAGINATION_PAGE_SIZE)
+): Promise<{ data: ProductTable[]; totalPages: number }> {
   try {
-    const products = await db.product.findMany();
+    const [data, productsCount] = await Promise.all([
+      db.product.findMany({
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+        orderBy: {
+          createdAt: "desc",
+        },
+      }),
+      db.product.count(),
+    ]);
 
-    const productsMap = products.map(
+    const totalPages = Math.ceil(productsCount / pageSize);
+
+    const productsMap = data.map(
       ({ id, name, price, dealerPrice, wholesalePrice, quantity }) => ({
         id,
         name,
@@ -30,14 +44,23 @@ async function getData(): Promise<ProductTable[]> {
         quantity: quantity.toString(),
       })
     );
-    return productsMap;
+
+    return { data: productsMap, totalPages };
   } catch (error) {
-    return [];
+    return { data: [], totalPages: 0 };
   }
 }
 
-export default async function ProductsPage() {
-  const data = await getData();
+export default async function ProductsPage({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  const { data, totalPages } = await getData(
+    Number(searchParams.page) || 1,
+    Number(searchParams.pageSize) ||
+      Number(process.env.NEXT_PUBLIC_PAGINATION_PAGE_SIZE)
+  );
   return (
     <div className="h-full">
       <div className="flex justify-between w-full">
@@ -59,7 +82,11 @@ export default async function ProductsPage() {
       </div>
 
       <div className="container mx-auto py-10">
-        <ProductDataTable columns={columns} data={data} />
+        <ProductDataTable
+          columns={columns}
+          data={data}
+          totalPages={totalPages}
+        />
       </div>
     </div>
   );
