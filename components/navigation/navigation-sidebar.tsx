@@ -15,6 +15,7 @@ import {
   List,
   Package,
   Phone,
+  Search,
   Settings,
   User,
 } from "lucide-react";
@@ -34,9 +35,9 @@ export default function NavigationSidebar() {
           path: "/products",
         },
         {
-          title: "About",
-          Icon: Info,
-          path: "/about",
+          title: "Search",
+          Icon: Search,
+          path: "/products/search-for-products",
         },
         {
           title: "Contact",

@@ -2,14 +2,10 @@ import AddProductForm from "@/components/products/add/add-product-form";
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 
 interface pageProps {}
 
