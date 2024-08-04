@@ -1,18 +1,24 @@
+"use client";
 import ActionTooltip from "@/components/action-tooltip";
 import { Icons } from "@/components/Icons";
 import ProductImages from "@/components/products/showProducts/product-images";
 import { Button } from "@/components/ui/button";
+import { useModal } from "@/hooks/use-modal-store";
 import { getAuthSession } from "@/lib/auth";
+import { db } from "@/lib/db";
 import { ProductWithImages } from "@/types/types";
 import { Pen, PenBox, Trash2 } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 interface ProductDetailsProps {
   product: ProductWithImages;
 }
 
-export default async function ProductDetails({ product }: ProductDetailsProps) {
-  const session = await getAuthSession();
+export default function ProductDetails({ product }: ProductDetailsProps) {
+  const { data: session } = useSession();
+  const { onOpen } = useModal();
   return (
     <div className="center mt-7">
       <div className="grid grid-cols-1 md:grid-cols-[.8fr_1.2fr] gap-x-9 my-9">
@@ -48,7 +54,15 @@ export default async function ProductDetails({ product }: ProductDetailsProps) {
               </Link>
             </ActionTooltip>
             <ActionTooltip label="Delete Product">
-              <Button className="" variant={"roseOutline"}>
+              <Button
+                className=""
+                variant={"roseOutline"}
+                onClick={() =>
+                  onOpen("deleteProduct", {
+                    apiUrl: `/api/products/delete/${product.id}`,
+                  })
+                }
+              >
                 <Trash2 />
               </Button>
             </ActionTooltip>
