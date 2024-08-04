@@ -8,8 +8,6 @@ export async function checkIfBarcodeAvailable(barcode: string) {
 
     const product = await db.product.findFirst({ where: { barcode } });
 
-    console.log(product);
-
     if (product)
       return { status: "This barcode is not available", isAvailable: false };
 

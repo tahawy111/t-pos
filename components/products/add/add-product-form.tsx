@@ -240,9 +240,9 @@ export default function AddProductForm({}: AddProductFormProps) {
                   required: "Barcode is required",
                 })}
               />
-              {errors.wholesalePrice && (
+              {errors.barcode && (
                 <p className="text-red-500 text-sm">
-                  {errors.wholesalePrice.message}
+                  {errors.barcode.message}
                 </p>
               )}
               {barcodeStatus && (
@@ -293,7 +293,6 @@ export default function AddProductForm({}: AddProductFormProps) {
               <p className="text-red-500 text-sm">{errors.quantity.message}</p>
             )}
           </div>
-
           <div className="mb-6">
             <label htmlFor="image" className="block text-gray-700 mb-2">
               Product Image
@@ -318,7 +317,7 @@ export default function AddProductForm({}: AddProductFormProps) {
               </h2>
               <p className="text-sm text-gray-600">Image (32MB)</p>
             </label>
-
+            TODO: delete the image
             <div className="flex flex-wrap">
               {imagesUrl.map(({ url }, index) => (
                 <div className="w-32 h-32 relative m-3" key={index}>

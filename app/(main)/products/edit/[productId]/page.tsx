@@ -20,7 +20,7 @@ async function fetchProduct(productId: string): Promise<ProductWithImages> {
   try {
     const product = await db.product.findUnique({
       where: { id: productId },
-      include: { images: true },
+      include: { images: { orderBy: { createdAt: "asc" } } },
     });
     if (!product) throw new Error("Product Not Found");
 

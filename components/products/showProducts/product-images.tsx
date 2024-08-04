@@ -45,7 +45,7 @@ const ProductImages: FC<ProductImagesProps> = ({ images }) => {
           </svg>
           <div
             id={DevImgsId}
-            className="flex w-full overflow-auto scrollbar-hide gap-3 scrollbar-hide space-y-2"
+            className="flex w-full overflow-auto scrollbar-hide gap-3 scrollbar-hide space-y-2 items-center"
           >
             {images.map((img, index) => (
               <Image

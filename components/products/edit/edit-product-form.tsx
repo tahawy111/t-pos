@@ -59,14 +59,14 @@ export default function EditProductForm({ product }: EditProductFormProps) {
   }, [barcode]);
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    if (!barcodeStatus.isAvailable) return;
+    // if (!barcodeStatus.isAvailable) return;
 
     setIsLoading(true);
     axios
-      .post("/api/products/add", { ...data, images: imagesUrl })
+      .put(`/api/products/edit/${product.id}`, { ...data, images: imagesUrl })
       .then((res) => {
-        toast.success("Product Created Successfully!");
-        router.push(`/products/${res.data.id}`);
+        toast.success("Product Updated Successfully!");
+        router.push(`/products/${product.id}`);
       })
       .catch((error) => {
         toast.error(error);
@@ -132,7 +132,7 @@ export default function EditProductForm({ product }: EditProductFormProps) {
     <div className="w-full flex justify-center">
       <div className="bg-white shadow-lg rounded-lg p-8 max-w-3xl w-full">
         <h1 className="text-2xl font-bold mb-6 text-center">
-          Add New Product 📝
+          Edit Product 📝
         </h1>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
@@ -247,11 +247,24 @@ export default function EditProductForm({ product }: EditProductFormProps) {
                   required: "Barcode is required",
                 })}
               />
-              {errors.wholesalePrice && (
+              {errors.barcode && (
                 <p className="text-red-500 text-sm">
-                  {errors.wholesalePrice.message}
+                  {errors.barcode.message}
                 </p>
               )}
+              {barcodeStatus && (
+                <p
+                  className={cn(
+                    "text-sm",
+                    barcodeStatus.isAvailable
+                      ? "text-green-500"
+                      : "text-red-500"
+                  )}
+                >
+                  {barcodeStatus.status}
+                </p>
+              )}
+              TODO: check every barcode unless its barcode
 
               <div
                 className="absolute top-2 right-1"
@@ -295,7 +308,6 @@ export default function EditProductForm({ product }: EditProductFormProps) {
               Product Image
             </label>
             <input
-              defaultValue={product.name}
               onChange={handleImageChange}
               type="file"
               className="hidden"
@@ -315,14 +327,14 @@ export default function EditProductForm({ product }: EditProductFormProps) {
               </h2>
               <p className="text-sm text-gray-600">Image (32MB)</p>
             </label>
-
+            TODO: delete the image
             <div className="flex flex-wrap">
-              {imagesUrl.map(({ url }, index) => (
+              {product.images.map(({ url }, index) => (
                 <div className="w-32 h-32 relative m-3" key={index}>
                   <Image alt="Product image" src={url} fill />
                 </div>
               ))}
-              {product.images.map(({ url }, index) => (
+              {imagesUrl.map(({ url }, index) => (
                 <div className="w-32 h-32 relative m-3" key={index}>
                   <Image alt="Product image" src={url} fill />
                 </div>
@@ -335,7 +347,7 @@ export default function EditProductForm({ product }: EditProductFormProps) {
             type="submit"
             className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-400"
           >
-            Add New Product
+            Update The Product
           </button>
         </form>
       </div>
