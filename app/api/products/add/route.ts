@@ -27,11 +27,11 @@ export async function POST(req: Request) {
     const product = await db.product.create({
       data: {
         name: productName,
-        price: +price,
+        price,
         barcode,
         quantity: +quantity,
-        dealerPrice: +dealerPrice,
-        wholesalePrice: +wholesalePrice,
+        dealerPrice,
+        wholesalePrice,
         userId: session.user.id,
         images: {
           createMany: {
@@ -40,8 +40,6 @@ export async function POST(req: Request) {
         },
       },
     });
-
-    
 
     return new Response(JSON.stringify(product));
   } catch (error) {

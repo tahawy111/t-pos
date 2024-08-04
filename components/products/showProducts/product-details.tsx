@@ -1,8 +1,11 @@
+import ActionTooltip from "@/components/action-tooltip";
 import { Icons } from "@/components/Icons";
 import ProductImages from "@/components/products/showProducts/product-images";
 import { Button } from "@/components/ui/button";
 import { getAuthSession } from "@/lib/auth";
 import { ProductWithImages } from "@/types/types";
+import { Pen, PenBox, Trash2 } from "lucide-react";
+import Link from "next/link";
 
 interface ProductDetailsProps {
   product: ProductWithImages;
@@ -36,9 +39,19 @@ export default async function ProductDetails({ product }: ProductDetailsProps) {
             </Button>
           </div>
 
-          <div className="space-y-3">
-            <Button className="" variant={"warningOutline"}>Edit</Button>
-            <Button className="" variant={"roseOutline"}>Delete</Button>
+          <div className="space-y-3 space-x-3">
+            <ActionTooltip label="Edit Product">
+              <Link href={`/products/edit/${product.id}`}>
+                <Button className="" variant={"warningOutline"}>
+                  <PenBox />
+                </Button>
+              </Link>
+            </ActionTooltip>
+            <ActionTooltip label="Delete Product">
+              <Button className="" variant={"roseOutline"}>
+                <Trash2 />
+              </Button>
+            </ActionTooltip>
           </div>
         </div>
       </div>

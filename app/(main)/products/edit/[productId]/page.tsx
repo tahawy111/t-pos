@@ -1,15 +1,16 @@
-import ProductDetails from "@/components/products/showProducts/product-details";
-import { db } from "@/lib/db";
-import { ProductWithImages } from "@/types/types";
+import AddProductForm from "@/components/products/add/add-product-form";
+import EditProductForm from "@/components/products/edit/edit-product-form";
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { db } from "@/lib/db";
+import { ProductWithImages } from "@/types/types";
 import Link from "next/link";
 
-interface ProductDetailsPageProps {
+interface pageProps {
   params: {
     productId: string;
   };
@@ -30,10 +31,9 @@ async function fetchProduct(productId: string): Promise<ProductWithImages> {
   }
 }
 
-export default async function ProductDetailsPage({
-  params: { productId },
-}: ProductDetailsPageProps) {
+export default async function page({ params: { productId } }: pageProps) {
   const product = await fetchProduct(productId);
+
   return (
     <div>
       <Breadcrumb className="py-3 px-3">
@@ -47,12 +47,12 @@ export default async function ProductDetailsPage({
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <Link href={`/products/${productId}`}>Product Details</Link>
+            <Link href={`/products/edit/${productId}`}>Edit Product</Link>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
 
-      <ProductDetails product={product} />
+      <EditProductForm product={product} />
     </div>
   );
 }

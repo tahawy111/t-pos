@@ -1,4 +1,5 @@
 "use client";
+import { cn } from "@/lib/utils";
 import { Image as ImageType } from "@prisma/client";
 import Image from "next/image";
 import { FC, useId, useState } from "react";
@@ -44,14 +45,14 @@ const ProductImages: FC<ProductImagesProps> = ({ images }) => {
           </svg>
           <div
             id={DevImgsId}
-            className="flex w-full overflow-auto scrollbar-hide gap-3 scrollbar-hide"
+            className="flex w-full overflow-auto scrollbar-hide gap-3 scrollbar-hide space-y-2"
           >
             {images.map((img, index) => (
               <Image
                 key={index}
                 src={img.url}
                 onClick={() => setImgIndex(index)}
-                className="w-32 h-32 object-contain rounded-sm cursor-pointer border-2 mx-1"
+                className={cn("w-32 h-32 object-contain rounded-sm cursor-pointer border-2 mx-1",index === imgIndex && "border-4 border-blue-500/30")}
                 alt={`Thumbnail ${index}`}
                 width={500}
                 height={500}

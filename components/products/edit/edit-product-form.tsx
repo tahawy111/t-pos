@@ -12,8 +12,11 @@ import Image from "next/image";
 import { cn, generateBarcode } from "@/lib/utils";
 import ActionTooltip from "../../action-tooltip";
 import { checkIfBarcodeAvailable } from "@/app/actions/productActions";
+import { ProductWithImages } from "@/types/types";
 
-interface AddProductFormProps {}
+interface EditProductFormProps {
+  product: ProductWithImages;
+}
 
 export interface ProductFormInputs {
   productName: string;
@@ -24,7 +27,7 @@ export interface ProductFormInputs {
   quantity: number;
 }
 
-export default function AddProductForm({}: AddProductFormProps) {
+export default function EditProductForm({ product }: EditProductFormProps) {
   const {
     register,
     handleSubmit,
@@ -137,6 +140,7 @@ export default function AddProductForm({}: AddProductFormProps) {
               Product Name
             </label>
             <Input
+              defaultValue={product.name}
               type="text"
               id="product-name"
               className="w-full p-2 border rounded"
@@ -157,6 +161,7 @@ export default function AddProductForm({}: AddProductFormProps) {
               Price
             </label>
             <Input
+              defaultValue={product.price}
               type="text"
               id="price"
               className="w-full p-2 border rounded"
@@ -179,6 +184,7 @@ export default function AddProductForm({}: AddProductFormProps) {
               Dealer Price
             </label>
             <Input
+              defaultValue={product?.dealerPrice || ""}
               type="text"
               id="dealer-price"
               className="w-full p-2 border rounded"
@@ -206,6 +212,7 @@ export default function AddProductForm({}: AddProductFormProps) {
               Wholesale Price
             </label>
             <Input
+              defaultValue={product?.wholesalePrice || ""}
               type="text"
               id="wholesale-price"
               className="w-full p-2 border rounded"
@@ -231,7 +238,7 @@ export default function AddProductForm({}: AddProductFormProps) {
             </label>
             <div className="relative">
               <Input
-                defaultValue={generateBarcode()}
+                defaultValue={product.barcode}
                 type="text"
                 id="barcode"
                 className="w-full p-2 border rounded"
@@ -245,19 +252,7 @@ export default function AddProductForm({}: AddProductFormProps) {
                   {errors.wholesalePrice.message}
                 </p>
               )}
-              {barcodeStatus && (
-                <p
-                  className={cn(
-                    "text-sm",
-                    barcodeStatus.isAvailable
-                      ? "text-green-500"
-                      : "text-red-500"
-                  )}
-                >
-                  {barcodeStatus.status}
-                </p>
-              )}
-              {/* TODO: Check if barcode is available */}
+
               <div
                 className="absolute top-2 right-1"
                 onClick={(e) => {
@@ -277,6 +272,7 @@ export default function AddProductForm({}: AddProductFormProps) {
               Quantity
             </label>
             <Input
+              defaultValue={product.quantity}
               type="text"
               id="quantity"
               className="w-full p-2 border rounded"
@@ -299,6 +295,7 @@ export default function AddProductForm({}: AddProductFormProps) {
               Product Image
             </label>
             <input
+              defaultValue={product.name}
               onChange={handleImageChange}
               type="file"
               className="hidden"
@@ -321,6 +318,11 @@ export default function AddProductForm({}: AddProductFormProps) {
 
             <div className="flex flex-wrap">
               {imagesUrl.map(({ url }, index) => (
+                <div className="w-32 h-32 relative m-3" key={index}>
+                  <Image alt="Product image" src={url} fill />
+                </div>
+              ))}
+              {product.images.map(({ url }, index) => (
                 <div className="w-32 h-32 relative m-3" key={index}>
                   <Image alt="Product image" src={url} fill />
                 </div>
