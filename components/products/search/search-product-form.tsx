@@ -35,6 +35,7 @@ export default function SearchProductForm({}: SearchProductFormProps) {
   const [searchResult, setSearchResult] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
+    
     setIsLoading(true);
     axios
       .post("/api/products/search", data)

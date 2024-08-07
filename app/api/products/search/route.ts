@@ -21,9 +21,6 @@ export async function POST(req: Request) {
       images,
     } = body;
 
-    if (!productName || !price || !barcode || !quantity)
-      return new Response("Missing Info", { status: 400 });
-
     const product = await db.product.create({
       data: {
         name: productName,
@@ -41,7 +38,7 @@ export async function POST(req: Request) {
       },
     });
 
-    return new Response(JSON.stringify(product));
+    // return new Response(JSON.stringify(product));
   } catch (error) {
     console.log("PRODUCT_CREATION_ERROR");
     return new Response("Internal Error", { status: 500 });
