@@ -241,9 +241,7 @@ export default function AddProductForm({}: AddProductFormProps) {
                 })}
               />
               {errors.barcode && (
-                <p className="text-red-500 text-sm">
-                  {errors.barcode.message}
-                </p>
+                <p className="text-red-500 text-sm">{errors.barcode.message}</p>
               )}
               {barcodeStatus && (
                 <p
@@ -329,8 +327,12 @@ export default function AddProductForm({}: AddProductFormProps) {
           </div>
 
           <button
+            disabled={isLoading}
             type="submit"
-            className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-400"
+            className={cn(
+              "w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-400",
+              isLoading ? "cursor-wait" : "cursor-pointer"
+            )}
           >
             Add New Product
           </button>

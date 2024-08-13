@@ -9,6 +9,11 @@ import { UploadCloud } from "lucide-react";
 import { imageUpload } from "@/lib/ImageUplaod";
 import Image from "next/image";
 import { Product } from "@prisma/client";
+import { ProductDataTable } from "@/components/products/search/search-product-data-table";
+import {
+  ProductTable,
+  columns,
+} from "@/components/products/search/search-product-columns";
 
 interface SearchProductFormProps {}
 
@@ -32,20 +37,25 @@ export default function SearchProductForm({}: SearchProductFormProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const [searchResult, setSearchResult] = useState<Product[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [productsData, setProductsData] = useState<{
+    products: ProductTable[];
+    totalPages: number;
+  }>({
+    products: [],
+    totalPages: 0,
+  });
+
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    
-    setIsLoading(true);
     axios
-      .post("/api/products/search", data)
-      .then((res) => {
-        // router.push(`/products/${res.data.id}`);
+      .post("/api/products/search", {
+        ...data,
+        pageSize: process.env.NEXT_PUBLIC_PAGINATION_PAGE_SIZE,
+        page: 1,
       })
+      .then((res) => setProductsData(res.data))
       .catch((error) => {
         toast.error(error);
-      })
-      .finally(() => setIsLoading(false));
+      });
   };
 
   // Initialize form values from URL search params
@@ -74,7 +84,7 @@ export default function SearchProductForm({}: SearchProductFormProps) {
   };
 
   return (
-    <div className="w-full flex justify-center">
+    <div className="w-full flex flex-col items-center">
       <div className="bg-white shadow-lg rounded-lg p-8 max-w-3xl w-full">
         <h1 className="text-2xl font-bold mb-6 text-center">
           Search For Products 🔎
@@ -218,7 +228,15 @@ export default function SearchProductForm({}: SearchProductFormProps) {
             Search 🔎
           </button>
         </form>
+
       </div>
+        <div className="container mx-auto py-10">
+          <ProductDataTable
+            columns={columns}
+            data={productsData.products}
+            totalPages={productsData.totalPages}
+          />
+        </div>
     </div>
   );
 }
