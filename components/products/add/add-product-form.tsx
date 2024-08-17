@@ -62,8 +62,12 @@ export default function AddProductForm({}: AddProductFormProps) {
     axios
       .post("/api/products/add", { ...data, images: imagesUrl })
       .then((res) => {
-        toast.success("Product Created Successfully!");
-        router.push(`/products/${res.data.id}`);
+        if (res.data.id !== undefined) {
+          toast.success("Product Created Successfully!");
+          router.push(`/products/${res.data.id}`);
+        }else {
+          toast.error("Product is already exists.")
+        }
       })
       .catch((error) => {
         toast.error(error);

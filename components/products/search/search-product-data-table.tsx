@@ -16,7 +16,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import ProductPaginationControls from "@/components/products/showProducts/product-pagination-controls";
+import ProductPaginationControls from "@/components/products/search/product-pagination-controls";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

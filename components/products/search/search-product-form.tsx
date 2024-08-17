@@ -14,6 +14,7 @@ import {
   ProductTable,
   columns,
 } from "@/components/products/search/search-product-columns";
+import { useProductSearchContext } from "@/components/contexts/product-search-context";
 
 interface SearchProductFormProps {}
 
@@ -36,21 +37,17 @@ export default function SearchProductForm({}: SearchProductFormProps) {
   } = useForm<ProductFormInputs>();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const page = Number(searchParams.get("page")) || 1;
   const pathname = usePathname();
-  const [productsData, setProductsData] = useState<{
-    products: ProductTable[];
-    totalPages: number;
-  }>({
-    products: [],
-    totalPages: 0,
-  });
+  const { productsData, setProductsData, setData } = useProductSearchContext();
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
+    setData(data as any)
     axios
       .post("/api/products/search", {
         ...data,
         pageSize: process.env.NEXT_PUBLIC_PAGINATION_PAGE_SIZE,
-        page: 1,
+        page: page,
       })
       .then((res) => setProductsData(res.data))
       .catch((error) => {
@@ -228,15 +225,14 @@ export default function SearchProductForm({}: SearchProductFormProps) {
             Search 🔎
           </button>
         </form>
-
       </div>
-        <div className="container mx-auto py-10">
-          <ProductDataTable
-            columns={columns}
-            data={productsData.products}
-            totalPages={productsData.totalPages}
-          />
-        </div>
+      <div className="container mx-auto py-10">
+        <ProductDataTable
+          columns={columns}
+          data={productsData.products}
+          totalPages={productsData.totalPages}
+        />
+      </div>
     </div>
   );
 }

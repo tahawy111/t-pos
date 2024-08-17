@@ -1,6 +1,9 @@
 "use client";
+import { useProductSearchContext } from "@/components/contexts/product-search-context";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function ProductPaginationControls({
   totalPages,
@@ -8,9 +11,12 @@ export default function ProductPaginationControls({
   totalPages: number;
 }) {
   const searchParams = useSearchParams();
-  const page = searchParams.get("page") ?? "1";
-  const pageSize = searchParams.get("pageSize") ?? process.env.NEXT_PUBLIC_PAGINATION_PAGE_SIZE;
+  const page = Number(searchParams.get("page")) ?? 1;
+  const pageSize =
+    searchParams.get("pageSize") ??
+    process.env.NEXT_PUBLIC_PAGINATION_PAGE_SIZE;
   const router = useRouter();
+  const { setProductsData, data } = useProductSearchContext();
   return (
     <div className="flex items-center justify-end space-x-2 py-4">
       <Button
@@ -19,8 +25,20 @@ export default function ProductPaginationControls({
         disabled={Number(page) <= 1}
         onClick={() => {
           router.push(
-            `/products?page=${Number(page) - 1}&pageSize=${pageSize}`
+            `/products/search-for-products?page=${
+              Number(page) - 1
+            }&pageSize=${pageSize}`
           );
+          axios
+            .post("/api/products/search", {
+              ...data,
+              pageSize: process.env.NEXT_PUBLIC_PAGINATION_PAGE_SIZE,
+              page: page,
+            })
+            .then((res) => setProductsData(res.data))
+            .catch((error) => {
+              toast.error(error);
+            });
         }}
       >
         Previous
@@ -34,8 +52,20 @@ export default function ProductPaginationControls({
         disabled={Number(page) >= totalPages}
         onClick={() => {
           router.push(
-            `/products?page=${Number(page) + 1}&pageSize=${pageSize}`
+            `/products/search-for-products?page=${
+              Number(page) + 1
+            }&pageSize=${pageSize}`
           );
+          axios
+            .post("/api/products/search", {
+              ...data,
+              pageSize: process.env.NEXT_PUBLIC_PAGINATION_PAGE_SIZE,
+              page: page,
+            })
+            .then((res) => setProductsData(res.data))
+            .catch((error) => {
+              toast.error(error);
+            });
         }}
       >
         Next
